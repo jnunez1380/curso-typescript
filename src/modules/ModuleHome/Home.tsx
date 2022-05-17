@@ -44,7 +44,7 @@ const Home = () => {
         {showResults && (
             <Fragment><h3>el numero es {count}</h3>
             <h3>el numeroTwo es {countTwo}</h3>
-            <Button type="primary" className='bg-red-800' onClick={reset}>Ocultar</Button>
+            <Button type="primary" danger onClick={reset}>Ocultar</Button>
             <h1 className='text-purple-800'>Hola: {moreInformation.nombre}, su edad es: {moreInformation.edad}</h1>
             </Fragment>)
         }

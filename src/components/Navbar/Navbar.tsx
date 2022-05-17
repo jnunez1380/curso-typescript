@@ -1,15 +1,22 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, ContactsOutlined } from '@ant-design/icons';
 
 
 function Navbar(){
     return (
     <Menu mode="horizontal" defaultSelectedKeys={['mail']}>
-        <Menu.Item key="mail" icon={<MailOutlined />}>
-        Navigation One
-        </Menu.Item>
+        <Link to="/">
+            <Menu.Item key="mail" icon={<HomeOutlined />}>
+                Home
+            </Menu.Item>
+        </Link>
+        <Link to="/contact">
+            <Menu.Item key="mail" icon={<ContactsOutlined />}>
+                Contact
+            </Menu.Item>
+        </Link>
     </Menu>    
     );
 }
