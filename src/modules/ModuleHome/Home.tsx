@@ -1,58 +1,107 @@
-import React, { Fragment, useState} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { Input } from 'antd';
-
+import { Console } from 'console';
+import { useStoreGlobalHome } from './store/useStoreGlobalHome';
+import DinamicButtons from './components/DinamicButtons/DinamicButtons';
 
 const Home = () => {
-    const [count, setCount] = useState(0);
-    const [countTwo, setCountTwo] = useState(0);
-    const [showResults, setShowResults] = useState(false);
-    const [moreInformation, setMoreInformaton] = useState({nombre:"", edad: 0});
+  const {
+    userName,
+    setUserName,
+    setEstatura,
+    estatura,
+    hoy,
+    showResults,
+    setShowResults,
+  } = useStoreGlobalHome();
+  const dataUser: any = localStorage.getItem('data_temp');
+  const [count, setCount] = useState(2);
+  const [counttwo, setCounttwo] = useState(0);
+  const [countExample, setCountExample] = useState(0);
+  const [text, setText] = useState('');
+  const [moreInformation, setmoreInformation] = useState({
+    nombre: '',
+    edad: 0,
+  });
 
-    const onClickSuma = (set: any, initialValue: number, incremental: number) => {
-        set(initialValue + incremental);
-        setShowResults(true);
-        setMoreInformaton({nombre:"Jorge", edad: 25});
+  // let miNombre;
+  // miNombre = "Casrlos";
+  // miNombre = "Luis";
+  // console.log(miNombre);
+
+  const reset = () => {
+    setCount(2);
+    setCounttwo(0);
+    setShowResults(false);
+  };
+
+  const onChangeInput = (e: any, typeValue: string) => {
+    if (typeValue === 'nombre') {
+      setUserName(e.target.value);
     }
-
-    const reset = () => {
-        setShowResults(false);
-        setCount(0);
-        setCountTwo(0);
-        setMoreInformaton({nombre:"", edad: 0});
+    if (typeValue === 'edad') {
+      setmoreInformation({ nombre: 'Jorge', edad: e.target.value });
     }
-
-    const onChangeInputs = (e: any, typeValue:string) => {
-        const moreInfo = moreInformation;
-        if(typeValue == "nombre"){
-            setMoreInformaton({nombre: e.target.value, edad: moreInfo.edad});
-        }
-        if(typeValue == "edad"){
-            setMoreInformaton({nombre: moreInfo.nombre, edad: e.target.value});
-        }
+    if (typeValue === 'estatura') {
+      setEstatura(e.target.value);
     }
+  };
 
-    return (
+  useEffect(() => {
+    if (count > 10) {
+      setCountExample(count);
+    }
+  }, [count]);
+
+  //
+
+  return (
     <Fragment>
-        <h1 className="text-3xl font-bold underline">
-            Hello world!
-        </h1>
-        
-        <Button type="primary" className='bg-slate-700' onClick={()=>onClickSuma(setCount,count,2)}>suma + 2</Button>
-        <Button type="primary" className='bg-slate-400' onClick={()=>onClickSuma(setCountTwo,countTwo,5)}>suma + 5</Button>
+      <h1 className="text-3xl font-bold underline text-green-800">
+        Hello world! {userName}
+      </h1>
+      <p className="text-3xl">{JSON.stringify(hoy)}</p>
+      <DinamicButtons
+        setText={setText}
+        count={count}
+        setCount={setCount}
+        counttwo={counttwo}
+        setCounttwo={setCounttwo}
+      />
 
-        {showResults && (
-            <Fragment><h3>el numero es {count}</h3>
-            <h3>el numeroTwo es {countTwo}</h3>
-            <Button type="primary" danger onClick={reset}>Ocultar</Button>
-            <h1 className='text-purple-800'>Hola: {moreInformation.nombre}, su edad es: {moreInformation.edad}</h1>
-            </Fragment>)
-        }
-        
-        <Input onChange={(e)=>onChangeInputs(e, "nombre")} placeholder="Escriba su nombre" />
-        <Input onChange={(e)=>onChangeInputs(e, "edad")} placeholder="Escriba su edad" />
+      {showResults && (
+        <Fragment>
+          {' '}
+          <h1 className="text-purple-800">
+            HOLA: {userName} tu edad es {moreInformation.edad} y tu estatura{' '}
+            {estatura}
+          </h1>
+          <h2 className="text-2xl text-blue-700">{text}</h2>
+          <h3>El número es: {count}</h3>
+          <h3>El número que aumenta en 5: {counttwo}</h3>
+          <Button type="primary" className="bg-red-900" onClick={reset}>
+            Ocultar
+          </Button>
+        </Fragment>
+      )}
 
-    </Fragment>);
-}
+      <Input
+        placeholder="Escriba su nombre"
+        onChange={(event) => onChangeInput(event, 'nombre')}
+      />
+      <Input
+        placeholder="Escriba su edad"
+        onChange={(e) => onChangeInput(e, 'edad')}
+      />
+      <Input
+        placeholder="Escriba su estatura"
+        onChange={(e) => onChangeInput(e, 'estatura')}
+      />
+
+      <h1>Ejemplo: {countExample}</h1>
+    </Fragment>
+  );
+};
 
 export default Home;
